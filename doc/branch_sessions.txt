@@ -1,4 +1,4 @@
-*branch_sessions.vim* *branch_sessions*
+*branch_sessions.vim* *branch_sessions* *branch-sessions*
 
                                                                     *:Mksession*
 :Mksession[!] [{session}]   Like |mksession|, but create a session file based
