@@ -61,12 +61,7 @@ endfunction
 function! s:File() abort
   let l:current_dir = fnamemodify(getcwd(), ':t')
   let l:branch = s:Branch()
-
-  if empty(l:branch)
-    return l:current_dir . '.vim'
-  else
-    return l:branch . '.vim'
-  endif
+  return empty(l:branch) ? l:current_dir . '.vim' : l:branch . '.vim'
 endfunction
 
 function! s:Directory() abort
@@ -85,7 +80,6 @@ endfunction
 function! s:Branch() abort
   if exists('*FugitiveHead')
     return FugitiveHead()
-  else
-    return trim(system('git rev-parse --abbrev-ref HEAD 2>/dev/null'))
   endif
+  return trim(system('git rev-parse --abbrev-ref HEAD 2>/dev/null'))
 endfunction
