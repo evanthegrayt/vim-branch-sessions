@@ -1,7 +1,6 @@
 function! branch_sessions#Start(...) abort
   if !exists(':Obsession')
-    echohl ErrorMsg | echomsg 'vim-obsession not installed.' | echohl None
-    return
+    return s:Abort('vim-obsession not installed.')
   endif
   let l:dir = s:Directory()
   let l:file = a:0 ? a:1 . '.vim' : s:File()
@@ -24,9 +23,7 @@ function! branch_sessions#Mksession(bang, ...) abort
   try
     execute l:command . ' ' . l:dir . l:file
   catch /^Vim\%((\a\+)\)\=:E189:/
-    echohl ErrorMsg
-    echomsg l:file . " exists. Add '!' to overwrite."
-    echohl None
+    call s:Abort(l:file . " exists. Add '!' to overwrite.")
   endtry
 endfunction
 
@@ -41,9 +38,7 @@ function! branch_sessions#Delete(...) abort
     echo 'Deleting session ' . l:session
     call delete(l:file)
   else
-    echohl ErrorMsg
-    echomsg 'Session ' . l:session . ' does not exist.'
-    echohl None
+    call s:Abort('Session ' . l:session . ' does not exist.')
   endif
 endfunction
 
@@ -82,4 +77,8 @@ function! s:Branch() abort
     return FugitiveHead()
   endif
   return trim(system('git rev-parse --abbrev-ref HEAD 2>/dev/null'))
+endfunction
+
+function! s:Abort(msg) abort
+  echohl ErrorMsg | echomsg 'BranchSessions: ' . a:msg | echohl None
 endfunction
