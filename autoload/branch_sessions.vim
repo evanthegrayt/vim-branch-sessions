@@ -10,6 +10,10 @@ endfunction
 function! branch_sessions#Load(...) abort
   let l:dir = s:Directory()
   let l:file = a:0 ? a:1 . '.vim' : s:File()
+  if !filereadable(l:dir . l:file)
+    return s:Abort('File ' . l:file . ' does not exist.')
+  endif
+  echomsg 'Loading file ' . l:file
   execute 'source ' . l:dir . l:file
 endfunction
 
@@ -35,7 +39,7 @@ function! branch_sessions#Delete(...) abort
   endif
   let l:file = s:Directory() . l:session . '.vim'
   if filereadable(l:file)
-    echo 'Deleting session ' . l:session
+    echomsg 'Deleting session ' . l:session
     call delete(l:file)
   else
     call s:Abort('Session ' . l:session . ' does not exist.')
