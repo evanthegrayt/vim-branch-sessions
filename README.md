@@ -64,10 +64,10 @@ as expected.
 ## Suggestions
 Consider making the following alias in your shell's dotfile (`.zshrc`,
 `.bashrc`) to start vim with your session already loaded.
+
 ```sh
 alias vims='vim -c SessionLoad'
 ```
-ssues and Feature Requests
 
 ## Reporting Bugs and Requesting Features
 If you have an idea or find a bug, please [create an
