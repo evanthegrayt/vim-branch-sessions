@@ -67,6 +67,13 @@ Consider making the following alias in your shell's dotfile (`.zshrc`,
 ```sh
 alias vims='vim -c SessionLoad'
 ```
+ssues and Feature Requests
+
+## Reporting Bugs and Requesting Features
+If you have an idea or find a bug, please [create an
+issue](https://github.com/evanthegrayt/vim-branch-sessions/issues/new). Just
+make sure the topic doesn't already exist. Better yet, you can always submit a
+Pull Request.
 
 ## Self-Promotion
 I do these projects for fun, and I enjoy knowing that they're helpful to people.
