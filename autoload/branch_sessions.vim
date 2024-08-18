@@ -1,29 +1,32 @@
-function! branch_sessions#Start(...) abort
+function! branch_sessions#Start() abort
   if !exists(':Obsession')
     return s:Error('vim-obsession not installed.')
   endif
   let l:dir = s:Directory()
-  let l:file = a:0 ? a:1 . '.vim' : s:File()
+  let l:file = s:File()
   execute 'Obsession ' . l:dir . l:file
 endfunction
 
 function! branch_sessions#Load(...) abort
   let l:dir = s:Directory()
-  let l:file = a:0 ? a:1 . '.vim' : s:File()
+  let l:file = s:File()
   if !filereadable(l:dir . l:file)
-    return s:Error('No session found for ' . l:file)
+    if !a:0 || (a:0 && !a:1)
+      call s:Error('No session found for ' . l:file)
+    endif
+    return
   endif
   echomsg 'Loading session ' . l:file
   execute 'source ' . l:dir . l:file
 endfunction
 
-function! branch_sessions#Mksession(bang, ...) abort
+function! branch_sessions#Mksession(bang) abort
   let l:command = 'mksession'
   if a:bang || get(g:, 'branch_sessions_mksession_bang')
     let l:command .= '!'
   endif
   let l:dir = s:Directory()
-  let l:file = a:0 ? a:1 . '.vim' : s:File()
+  let l:file = s:File()
   try
     execute l:command . ' ' . l:dir . l:file
   catch /^Vim\%((\a\+)\)\=:E189:/
@@ -31,8 +34,8 @@ function! branch_sessions#Mksession(bang, ...) abort
   endtry
 endfunction
 
-function! branch_sessions#Delete(...) abort
-  let l:session = a:0 ? a:1 : s:Branch()
+function! branch_sessions#Delete() abort
+  let l:session = s:Branch()
   if l:session == s:Branch() && exists(':Obsession')
     Obsession!
     return
@@ -44,17 +47,6 @@ function! branch_sessions#Delete(...) abort
   else
     call s:Error('No session found for' . l:session)
   endif
-endfunction
-
-function! branch_sessions#Completion(...) abort
-  let l:dir = s:Directory()
-  if !isdirectory(l:dir)
-    return ''
-  endif
-  let l:list = map(
-        \   glob(l:dir . '**/*.vim', 0, 1), {_, v -> substitute(v, '.vim$', '', '') }
-        \ )
-  return join(map(l:list, {_, v -> substitute(v, l:dir, '', '')}), "\n")
 endfunction
 
 function! s:File() abort
