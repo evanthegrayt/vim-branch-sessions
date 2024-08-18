@@ -2,33 +2,31 @@
 
 COMMANDS                                              *branch-sessions-commands*
 
-:Mksession[!] [{session}]   Like |:mksession|, but create a session file based
+:Mksession[!]               Like |:mksession|, but create a session file based
                             on current directory. If the current directory is a
                             git repository, make a directory named after the
                             current directory and a session file named after
-                            the current git branch.  If {session} is specified,
-                            that name will be used instead. Session files are
-                            kept in "$HOME/.cache/vim_sessions", but the
-                            directory can be changed with
-                            |g:branch_sessions_directory|. To mimic the
-                            behavior of |:mksession|, if the session file
-                            already exists, it will result in an error, but you
-                            can call with "!" to overwrite the current session
-                            file. This can be tedious, so you can set
+                            the current git branch. Session files are kept in
+                            "$HOME/.cache/vim_sessions", but the directory can
+                            be changed with |g:branch_sessions_directory|. To
+                            mimic the behavior of |:mksession|, if the session
+                            file already exists, it will result in an error,
+                            but you can call with "!" to overwrite the current
+                            session file. This can be tedious, so you can set
                             |g:branch_sessions_mksession_bang| to 1 to always
                             call |:mksession| with a "!".
 
                                                                  *:SessionStart*
-:SessionStart [{session}]   Like |:Mksession|, but continue tracking any
+:SessionStart               Like |:Mksession|, but continue tracking any
                             changes. Must have tpope's vim-obsession installed.
 
                                                                   *:SessionLoad*
-:SessionLoad [{session}]    Load the session file for the current directory. If
+:SessionLoad                Load the session file for the current directory. If
                             the current directory is a git repository, load the
                             session file for the current directory and branch.
 
                                                                 *:SessionDelete*
-:SessionDelete [{session}]  Delete the session file for the current directory.
+:SessionDelete              Delete the session file for the current directory.
                             If the current directory is a git repository, delete
                             the session file for the current directory and
                             branch.
