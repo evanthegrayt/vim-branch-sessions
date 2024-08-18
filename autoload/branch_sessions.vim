@@ -1,6 +1,6 @@
 function! branch_sessions#Start(...) abort
   if !exists(':Obsession')
-    return s:Abort('vim-obsession not installed.')
+    return s:Error('vim-obsession not installed.')
   endif
   let l:dir = s:Directory()
   let l:file = a:0 ? a:1 . '.vim' : s:File()
@@ -11,7 +11,7 @@ function! branch_sessions#Load(...) abort
   let l:dir = s:Directory()
   let l:file = a:0 ? a:1 . '.vim' : s:File()
   if !filereadable(l:dir . l:file)
-    return s:Abort('No session found for ' . l:file)
+    return s:Error('No session found for ' . l:file)
   endif
   echomsg 'Loading session ' . l:file
   execute 'source ' . l:dir . l:file
@@ -27,7 +27,7 @@ function! branch_sessions#Mksession(bang, ...) abort
   try
     execute l:command . ' ' . l:dir . l:file
   catch /^Vim\%((\a\+)\)\=:E189:/
-    call s:Abort(l:file . " exists. Add '!' to overwrite.")
+    call s:Error(l:file . " exists. Add '!' to overwrite.")
   endtry
 endfunction
 
@@ -42,7 +42,7 @@ function! branch_sessions#Delete(...) abort
     echomsg 'Deleting session ' . l:session
     call delete(l:file)
   else
-    call s:Abort('No session found for' . l:session)
+    call s:Error('No session found for' . l:session)
   endif
 endfunction
 
@@ -52,9 +52,9 @@ function! branch_sessions#Completion(...) abort
     return ''
   endif
   let l:list = map(
-        \   glob(l:dir . '*.vim', 0, 1), "substitute(v:val, '.vim$', '', '')"
+        \   glob(l:dir . '**/*.vim', 0, 1), {_, v -> substitute(v, '.vim$', '', '') }
         \ )
-  return join(map(l:list, "substitute(v:val, l:dir, '', '')"), "\n")
+  return join(map(l:list, {_, v -> substitute(v, l:dir, '', '')}), "\n")
 endfunction
 
 function! s:File() abort
@@ -83,6 +83,6 @@ function! s:Branch() abort
   return trim(system('git rev-parse --abbrev-ref HEAD 2>/dev/null'))
 endfunction
 
-function! s:Abort(msg) abort
+function! s:Error(msg) abort
   echohl ErrorMsg | echomsg 'BranchSessions: ' . a:msg | echohl None
 endfunction
